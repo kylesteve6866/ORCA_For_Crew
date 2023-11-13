@@ -1,0 +1,3 @@
+﻿  Navigator.cpp
+D:\VS2022\VC\Tools\MSVC\14.37.32822\include\filesystem(13): warning STL4038: The contents of <filesystem> are available only with C++17 or later.
+  ORCA_For_Crew.vcxproj -> D:\Epic\UE_Assistance_Projects\ORCA_For_Crew\x64\Debug\ORCA_For_Crew.exe
