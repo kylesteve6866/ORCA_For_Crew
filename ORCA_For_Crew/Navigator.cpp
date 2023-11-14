@@ -46,20 +46,31 @@ void setupScenario(RVO::RVOSimulator* sim, std::vector<std::vector<float>>& obst
     std::srand(static_cast<unsigned int>(std::time(NULL)));
 #endif
 
-    /*这里的参数可以调节模拟的时间步步长，数值越大，模拟越不精准，相邻两次模拟的位移越大*/
+    /*这里的参数可以调节模拟的时间步步长，数值越大，模拟越不精准，甚至可能会导致死锁或发生碰撞，
+    但是相邻两次模拟的位移越大。时间步参数表示的就是多久调用ORCA计算调整一次速度大小和方向*/
     /* Specify the global time step of the simulation. */
-    sim->setTimeStep(1.0f);
+    sim->setTimeStep(1.5f);
 
     /* Specify the default parameters for agents that are subsequently added. */
-    sim->setAgentDefaults(15.0f, 10, 5.0f, 5.0f, 2.0f, 2.0f);
-    /*参数列表 
+    sim->setAgentDefaults(15.0f, 10, 5.0f, 5.0f, 30.0f, 2.0f);
+    /*
+    参数列表 
     float neighborDist,
     size_t maxNeighbors,
     float timeHorizon,
     float timeHorizonObst,
     float radius,
     float maxSpeed,
-    const Vector2 &velocity*/
+    const Vector2 &velocity
+    timeHorizon（时间视野）： 增加timeHorizon可能使代理更有长远的预测能力，有助于避免与其他代理的碰撞。
+    如果代理在遇到其他代理时卡住，增加时间视野可能有助于更好地规划避让策略。
+    timeHorizonObst（障碍物时间视野）： 同样，增加timeHorizonObst可能使代理更早地察觉到障碍物，有助于
+    规划更充分的避让策略。如果代理在接近障碍物时出现问题，可以尝试增加这个时间视野。
+
+    用 当前时间步智能体间的安全距离/timeHrizon 可以得到避免碰撞的速度域，进而通过调整现有速度避免碰撞。
+
+    对于SimulationDisplay项目中的舰员来说，radius设置为30较为合适。
+    */
 
     /*
      * Add agents, specifying their start position, and store their goals on the
@@ -368,7 +379,7 @@ int main() {
        注意一定的要建好目录再运行
        obstacles_loadingPath 为存放障碍物位置的文件，更改这项则可以改变障碍物读取的路径
        agents_loadingPath 为存放障智能体位置和目的地的文件，更改这项则可以改变障碍物读取的路径*/
-    std::string folder = "02_three_agents_opposite/";
+    std::string folder = "02_fourAgents_twoObstacles/";
     std::string obstacles_loadingPath = "../config/obstacles.txt";
     std::string agents_loadingPath = "../config/agent.txt";
     readObstacle(obstacles_loadingPath, obstacles);
