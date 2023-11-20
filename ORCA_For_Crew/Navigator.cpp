@@ -178,7 +178,7 @@ void setPreferredVelocities(RVO::RVOSimulator* sim)
 
 
 //将当前的位置和速度存入项目文件夹下的 “path/自定义目录” 下，每一个时间步的计算结果保存为一个文件
-void pathPoingEntering(RVO::RVOSimulator* sim, std::vector<float> agent_ID, std::string folder) {
+void pathPointEntering(RVO::RVOSimulator* sim, std::vector<float> agent_ID, std::string folder) {
     
     //拿到当前时间步
     float global_Time = sim->getGlobalTime();
@@ -201,10 +201,10 @@ void pathPoingEntering(RVO::RVOSimulator* sim, std::vector<float> agent_ID, std:
 
     //检查文件是否成功打开
     if (outputFile.is_open()) {
-        std::cout << "文件已成功创建并打开" << std::flush;
+        std::cout << "文件已成功创建并打开" << std::endl;
     }
     else {
-        std::cerr << "无法打开文件" << std::endl;
+        std::cerr << "无法打开文件\n" << std::endl;
         return;
     }
 
@@ -227,10 +227,9 @@ void pathPoingEntering(RVO::RVOSimulator* sim, std::vector<float> agent_ID, std:
         
         //将拿到的信息写入文件
         outputFile << step_Counter + 1 << " " << ID << " " << pos_x << " " << pos_y << " " << velocity_x << " " << velocity_y << std::endl;         
-        if (i < sim->getNumAgents() - 1) {
-                std::cout << std::endl;
-        }
+
     }
+    std::cout << std::endl;
     outputFile.close();
 }
 
@@ -379,7 +378,7 @@ int main() {
        注意一定的要建好目录再运行
        obstacles_loadingPath 为存放障碍物位置的文件，更改这项则可以改变障碍物读取的路径
        agents_loadingPath 为存放障智能体位置和目的地的文件，更改这项则可以改变障碍物读取的路径*/
-    std::string folder = "02_fourAgents_twoObstacles/";
+    std::string folder = "03_fourAgents_twoObstacles/";
     std::string obstacles_loadingPath = "../config/obstacles.txt";
     std::string agents_loadingPath = "../config/agent.txt";
     readObstacle(obstacles_loadingPath, obstacles);
@@ -395,7 +394,7 @@ int main() {
     #if RVO_OUTPUT_TIME_AND_POSITIONS
         updateVisualization(sim);
     #endif
-        pathPoingEntering(sim, agent_ID, folder);
+        pathPointEntering(sim, agent_ID, folder);
         setPreferredVelocities(sim);
         sim->doStep();
     } while (!reachedGoal(sim));
